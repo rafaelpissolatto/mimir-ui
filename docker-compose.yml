@@ -1,0 +1,56 @@
+services:
+
+  mimir:
+    image: grafana/mimir:latest
+    command:
+      - "-config.file=/etc/mimir/mimir.yaml"
+      - "-target=all,alertmanager"
+    ports:
+      - "9009:8080"
+    volumes:
+      - ./config/mimir.yaml:/etc/mimir/mimir.yaml:ro
+      - mimir-data:/data
+    restart: on-failure
+
+  mimirtool-rules:
+    image: grafana/mimirtool:latest
+    command:
+      - rules
+      - load
+      - --address=http://mimir:8080
+      - --id=demo
+      - /rules/mimir-health.yaml
+    volumes:
+      - ./config/rules:/rules:ro
+    depends_on:
+      - mimir
+    restart: on-failure
+
+  mimirtool-alertmanager:
+    image: grafana/mimirtool:latest
+    command:
+      - alertmanager
+      - load
+      - --address=http://mimir:8080
+      - --id=demo
+      - /rules/alertmanager.yaml
+    volumes:
+      - ./config/rules:/rules:ro
+    depends_on:
+      - mimir
+    restart: on-failure
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+      - "--storage.tsdb.retention.time=1h"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+    depends_on:
+      - mimir
+
+volumes:
+  mimir-data:

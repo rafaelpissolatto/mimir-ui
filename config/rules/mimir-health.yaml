@@ -1,0 +1,60 @@
+groups:
+  - name: mimir-health
+    interval: 30s
+    rules:
+      # Recording: per-job HTTP request rate (Mimir uses the cortex_ metric prefix internally)
+      - record: job:mimir_request_rate:rate5m
+        expr: |
+          sum by (job, route, status_code) (
+            rate(cortex_request_duration_seconds_count[5m])
+          )
+
+      # Recording: sample ingestion rate per tenant
+      - record: job:mimir_ingest_rate:rate5m
+        expr: |
+          sum by (user) (
+            rate(cortex_distributor_received_samples_total[5m])
+          )
+
+      # Alert: Mimir scrape target is unreachable
+      - alert: MimirDown
+        expr: up{job="mimir"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Mimir is down"
+          description: "Mimir scrape target {{ $labels.instance }} has been down for more than 1 minute."
+
+      # Alert: HTTP 5xx error rate exceeds 1% on any route
+      - alert: MimirHighErrorRate
+        expr: |
+          (
+            sum by (job, route) (rate(cortex_request_duration_seconds_count{status_code=~"5.."}[5m]))
+            /
+            sum by (job, route) (rate(cortex_request_duration_seconds_count[5m]))
+          ) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Mimir error rate >1% on route {{ $labels.route }}"
+          description: 'Route {{ $labels.route }} has a 5xx error rate of {{ printf "%.2f" $value }}%.'
+
+      # Alert: no samples reaching Mimir for the demo tenant
+      - alert: MimirNoIngest
+        expr: |
+          absent(job:mimir_ingest_rate:rate5m{user="demo"})
+          or sum(job:mimir_ingest_rate:rate5m{user="demo"}) == 0
+        for: 3m
+        labels:
+          severity: warning
+          alert_type: no_ingest
+          label_3: value_3
+          label_4: value_4
+          label_5: value_5
+          label_6: value_6
+          label_7: value_7
+        annotations:
+          summary: "No ingestion for tenant demo"
+          description: "Prometheus remote_write may be down or not delivering samples to Mimir."

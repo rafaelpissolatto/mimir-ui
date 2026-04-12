@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════
+   FORGE DESIGN SYSTEM — Mimir UI
+   Dark-first precision instrument aesthetic
+   ══════════════════════════════════════════════════════ */
+
+:root {
+  --bg:             #09090b;
+  --surface:        #111113;
+  --elevated:       #1a1a1d;
+  --border:         #27272a;
+  --border-subtle:  #1e1e21;
+
+  --amber:          #d97706;
+  --amber-bright:   #f59e0b;
+  --amber-dim:      rgba(217, 119, 6, 0.10);
+  --amber-glow:     rgba(217, 119, 6, 0.25);
+
+  --text:           #fafaf9;
+  --text-2:         #a1a1aa;
+  --text-3:         #52525b;
+
+  --green:          #22c55e;
+  --green-dim:      rgba(34, 197, 94, 0.12);
+  --red:            #ef4444;
+  --red-dim:        rgba(239, 68, 68, 0.12);
+  --sky:            #38bdf8;
+
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Light mode — swap palette on .light class */
+.light {
+  --bg:             #f4f4f6;
+  --surface:        #ffffff;
+  --elevated:       #eeeef1;
+  --border:         #dddde2;
+  --border-subtle:  #e8e8ec;
+  --amber-dim:      rgba(217, 119, 6, 0.08);
+  --text:           #111113;
+  --text-2:         #52525b;
+  --text-3:         #a1a1aa;
+}
+
+/* ── Reset & Base ─────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+#root { height: 100%; }
+
+/* ── Scrollbars ───────────────────────────────────────── */
+
+::-webkit-scrollbar          { width: 5px; height: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── Sidebar Navigation Links ────────────────────────── */
+
+.forge-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  border-left: 2px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.forge-nav-link:hover {
+  background: var(--elevated);
+  color: var(--text);
+}
+
+.forge-nav-link.active {
+  color: var(--amber-bright);
+  background: var(--amber-dim);
+  border-left-color: var(--amber);
+}
+
+.forge-nav-link svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.forge-nav-link:hover svg  { color: var(--text-2); }
+.forge-nav-link.active svg { color: var(--amber); }
+
+/* ── Buttons ─────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.btn:hover { background: var(--elevated); color: var(--text); }
+
+.btn-primary {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #09090b;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--amber-bright);
+  border-color: var(--amber-bright);
+  color: #09090b;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--text-3);
+}
+
+.btn-ghost:hover { background: var(--elevated); border-color: var(--border); color: var(--text-2); }
+
+/* ── Cards ───────────────────────────────────────────── */
+
+.forge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.forge-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--elevated);
+}
+
+.forge-card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+/* ── Badges ──────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge-firing {
+  background: var(--red-dim);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.badge-firing::before { background: var(--red); }
+
+.badge-pending {
+  background: rgba(245, 158, 11, 0.10);
+  color: var(--amber-bright);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.badge-pending::before { background: var(--amber-bright); }
+
+.badge-inactive {
+  background: var(--elevated);
+  color: var(--text-3);
+  border-color: var(--border);
+}
+.badge-inactive::before { background: var(--text-3); }
+
+.badge-recording {
+  background: var(--green-dim);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+.badge-recording::before { background: var(--green); }
+
+.badge-alerting {
+  background: rgba(56, 189, 248, 0.10);
+  color: var(--sky);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+.badge-alerting::before { background: var(--sky); }
+
+/* ── Query Editor ─────────────────────────────────────── */
+
+.promql-editor {
+  width: 100%;
+  padding: 14px 16px;
+  background: #060609;
+  border: none;
+  outline: none;
+  color: #c9b99a;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  resize: vertical;
+  min-height: 100px;
+  caret-color: var(--amber-bright);
+}
+
+.promql-editor::placeholder { color: var(--text-3); }
+
+/* ── Status Dot ──────────────────────────────────────── */
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 5px var(--green); }
+  50%       { opacity: 0.5; box-shadow: 0 0 2px var(--green); }
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+/* ── Page Transition ─────────────────────────────────── */
+
+@keyframes forge-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.forge-page { animation: forge-in 0.22s ease-out; }
+
+/* ── Segment Control ─────────────────────────────────── */
+
+.seg-ctrl {
+  display: flex;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 1px;
+}
+
+.seg-btn {
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.seg-btn.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ── Empty States ────────────────────────────────────── */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 40px;
+  gap: 12px;
+  opacity: 0.55;
+}
+
+.empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--elevated);
+}
+
+.empty-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.empty-hint {
+  font-size: 12px;
+  color: var(--text-3);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* ── Table ───────────────────────────────────────────── */
+
+.forge-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.forge-table th {
+  padding: 8px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  background: var(--elevated);
+}
+
+.forge-table td {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.forge-table tbody tr:last-child td { border-bottom: none; }
+.forge-table tbody tr:hover td { background: var(--elevated); color: var(--text); }
+
+/* ── Mono Text ───────────────────────────────────────── */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+/* ── Input ───────────────────────────────────────────── */
+
+.forge-input {
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.forge-input:focus { border-color: var(--amber); }
+.forge-input::placeholder { color: var(--text-3); }
+
+/* ── Select ──────────────────────────────────────────── */
+
+.forge-select {
+  padding: 6px 28px 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-2);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2352525b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.forge-select:focus { border-color: var(--amber); }
+
+/* ── Spinner ─────────────────────────────────────────── */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--amber);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
